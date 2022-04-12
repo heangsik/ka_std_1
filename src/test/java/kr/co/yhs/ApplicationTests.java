@@ -1,6 +1,6 @@
 package kr.co.yhs;
 
-import kr.co.yhs.entity.TradeList;
+import kr.co.yhs.entity.TradeEntity;
 import kr.co.yhs.repository.RepositoryTradeList;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -18,10 +18,10 @@ class ApplicationTests {
 	@DisplayName("Jpa insert test")
 	private void insertJpa()
 	{
-		TradeList tl = new TradeList();
+		TradeEntity tl = new TradeEntity();
 
 		tl.setTitle("test trade 1");
-		TradeList stl = rm.save(tl);
+		TradeEntity stl = rm.save(tl);
 		Assertions.assertThat(tl.getTitle()).isEqualTo(stl.getTitle());
 	}
 

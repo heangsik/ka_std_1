@@ -1,23 +1,29 @@
 package kr.co.yhs.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.co.yhs.entity.TradeList;
+import kr.co.yhs.configuration.CustomMapper;
+import kr.co.yhs.dto.TradeDto;
 import kr.co.yhs.repository.RepositoryTradeList;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class InvestmentService {
     final RepositoryTradeList rm;
+    final CustomMapper customMapper;
 
-    public List<TradeList> getAbleTrade() {
-        ObjectMapper om = new ObjectMapper();
-        om.writeValueAsString(rm.findAll().get(0))
-        return  ;
+    public List<TradeDto> getAllTrade() {
+        ModelMapper mm = customMapper.TradeDtoMapperForTradeList();
+        return  rm.findAll().stream().map(unit-> mm.map(unit, TradeDto.class)).collect(Collectors.toList());
+    }
+    public List<TradeDto> getAbleTrade() {
+        ModelMapper mm = customMapper.TradeDtoMapperForTradeList();
+        return  rm.findAbleTradeList(LocalDateTime.now()).stream().map(unit-> mm.map(unit, TradeDto.class)).collect(Collectors.toList());
     }
 
     //    public

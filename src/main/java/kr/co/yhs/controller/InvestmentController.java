@@ -22,10 +22,21 @@ public class InvestmentController {
         return "connection succesws";
     }
     @PostMapping(value = "/selectAll")
-    public ResultDto selectTrade(@RequestBody InverstmentSelectDto dto)
+    public ResultDto selectAllTrade(@RequestHeader("X-USER-ID") String header, @RequestBody InverstmentSelectDto dto)
     {
-        log.info("select all select");
-        return new ResultDto();
+        log.info("select all select x-user-id={}, body={}", header, dto.toString());
+        ResultDto rd = new ResultDto();
+        rd.setTradeList(investmentService.getAllTrade());
+        return rd;
+
+    }
+    @PostMapping(value = "/selectAble")
+    public ResultDto selectAbleTrade(@RequestHeader("X-USER-ID") String header, @RequestBody InverstmentSelectDto dto)
+    {
+        log.info("select able select x-user-id={}, body={}", header, dto.toString());
+        ResultDto rd = new ResultDto();
+        rd.setTradeList(investmentService.getAbleTrade());
+        return rd;
 
     }
     @PostMapping(value = "/api")
