@@ -8,5 +8,6 @@ import lombok.Data;
 @Data
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class InverstmentSelectDto {
-
+    private String userName;
+    private long amount;
 }
