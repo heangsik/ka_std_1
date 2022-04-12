@@ -17,6 +17,9 @@ public class TradeImpl implements TradeRepository{
     public List<TradeEntity> getTradeList() {
         return null;
     }
+    /*
+    
+     */
     QTradeEntity tradeEntity = QTradeEntity.tradeEntity;
 
 }
