@@ -1,5 +1,6 @@
 package kr.co.yhs.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.yhs.entity.TradeList;
 import kr.co.yhs.repository.RepositoryTradeList;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,9 @@ public class InvestmentService {
     final RepositoryTradeList rm;
 
     public List<TradeList> getAbleTrade() {
-        return  rm.findAll();
+        ObjectMapper om = new ObjectMapper();
+        om.writeValueAsString(rm.findAll().get(0))
+        return  ;
     }
 
     //    public
