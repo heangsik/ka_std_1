@@ -19,15 +19,9 @@ public class QTradeDetail extends EntityPathBase<TradeDetail> {
 
     public static final QTradeDetail tradeDetail = new QTradeDetail("tradeDetail");
 
-    public final DateTimePath<java.time.LocalDateTime> finishAt = createDateTime("finishAt", java.time.LocalDateTime.class);
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final NumberPath<Long> parentId = createNumber("parentId", Long.class);
-
-    public final DateTimePath<java.time.LocalDateTime> startAt = createDateTime("startAt", java.time.LocalDateTime.class);
-
-    public final StringPath title = createString("title");
 
     public final NumberPath<Long> tradeAmount = createNumber("tradeAmount", Long.class);
 

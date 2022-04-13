@@ -19,11 +19,4 @@ public class TradeDetail {
     private String userId;
     private LocalDateTime tradeDt;
 
-    private String title;
-
-
-    private LocalDateTime startAt;
-    private LocalDateTime finishAt;
-
-
 }

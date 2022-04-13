@@ -5,6 +5,7 @@ import kr.co.yhs.config.code.RESPONSE_CODE;
 import kr.co.yhs.dto.entity.TradeDto;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -26,4 +27,6 @@ public class ResultDto {
     private String resultCode;
     private String resultMsg;
     private List<TradeDto> tradeList;
+    private LocalDateTime tradeDt;
+    private long productId;
 }

@@ -1,9 +1,13 @@
 package kr.co.yhs;
 
 import kr.co.yhs.config.code.TRADE_STATE;
+import kr.co.yhs.dto.entity.AbleTradeDto;
 import kr.co.yhs.dto.entity.TradeDto;
+import kr.co.yhs.dto.result.ResultDto;
 import kr.co.yhs.entity.TradeEntity;
 import kr.co.yhs.repository.RepositoryTradeList;
+import kr.co.yhs.repository.TradeRepository;
+import kr.co.yhs.service.InvestmentService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +25,10 @@ public class StdTestModule {
     RepositoryTradeList rm;
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    InvestmentService investmentService;
+    @Autowired
+    TradeRepository tradeRepository;
 
     @DisplayName("Jpa insert test")
     void JpaInsert() {
@@ -33,6 +41,17 @@ public class StdTestModule {
         }
 
     }
+
+
+    @Test
+    @DisplayName("seelct able trade")
+    private void AbleTradeSelectTest(){
+
+        List<AbleTradeDto> list = tradeRepository.getAbleTrade();
+        Assertions.assertThat(list.size()).isGreaterThan(1);
+    }
+
+
     @Test
     void insertRawData()
     {

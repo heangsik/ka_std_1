@@ -7,7 +7,7 @@ import java.util.Arrays;
 @Getter
 public enum TRADE_STATE {
     ST01("ready", "ST01"),
-    ST02("start", "ST02");
+    ST02("end", "ST02");
     String desc;
     String cd;
 

@@ -7,14 +7,19 @@ import kr.co.yhs.service.InvestmentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+import javax.validation.executable.ValidateOnExecution;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
 @RestController
+@Validated
 public class InvestmentController {
 
     private final InvestmentService investmentService;
@@ -31,17 +36,21 @@ public class InvestmentController {
     public ResultDto selectAbleTrade(@RequestHeader("X-USER-ID") String header, @RequestBody BodyDto dto)
     {
         log.info("select able select x-user-id={}, body={}", header, dto.toString());
-        ResultDto rd = ResultDto.success();
-        rd.setTradeList(investmentService.getAbleTrade());
-        return rd;
+        return investmentService.getAbleTrade();
 
     }
     @PostMapping(value = "/requestTrade")
-    public ResultDto requestTrade(@RequestHeader("X-USER-ID") String header, @Valid @RequestBody InverstmentDto dto)
+    public ResultDto requestTrade(@RequestHeader(value = "X-USER-ID", required = true) @NotEmpty String hUserId, @Valid @RequestBody InverstmentDto dto)
     {
-        log.info("trade request x-user-id={}, body={}", header, dto.toString());
-        ResultDto rd = ResultDto.success();
-        rd.setTradeList(investmentService.getAbleTrade());
+        log.info("trade request x-user-id={}, body={}", hUserId, dto.toString());
+        return investmentService.tradeRequest(hUserId, dto);
+
+    }
+    @PostMapping(value = "/myTrade")
+    public ResultDto myTrade(@RequestHeader(value = "X-USER-ID", required = true) @NotEmpty String hUserId, @Valid @RequestBody InverstmentDto dto)
+    {
+        log.info("my trade request x-user-id={}, body={}", hUserId, dto.toString());
+        ResultDto rd = investmentService.tradeRequest(hUserId, dto);
         return rd;
 
     }

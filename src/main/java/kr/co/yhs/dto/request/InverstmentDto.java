@@ -14,9 +14,18 @@ import javax.validation.constraints.Pattern;
 public class InverstmentDto {
     @Pattern(regexp = "^[0-9]*$")
     @NotEmpty
-    private String Inverstmentamount;
+    private String InverstmentAmount;
     @Pattern(regexp = "^[0-9]*$")
     @NotEmpty
     private String productId;
+
+    public long getProductIdLong()
+    {
+        return Long.parseLong(productId);
+    }
+    public long getInverstmentAmountLong()
+    {
+        return Long.parseLong(InverstmentAmount);
+    }
 
 }
