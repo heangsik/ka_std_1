@@ -28,7 +28,7 @@ public class InvestmentController {
     {
         log.info("select all select x-user-id={}, body={}", header, dto.toString());
         ResultDto rd = ResultDto.success();
-        rd.setTradeList(investmentService.getAllTrade());
+        rd.setAllTradeList(investmentService.getAllTrade());
         return rd;
 
     }

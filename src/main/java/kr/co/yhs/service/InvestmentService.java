@@ -2,6 +2,7 @@ package kr.co.yhs.service;
 
 import kr.co.yhs.config.code.RESPONSE_CODE;
 import kr.co.yhs.config.code.TRADE_STATE;
+import kr.co.yhs.dto.entity.AbleTradeDto;
 import kr.co.yhs.dto.entity.TradeDetailSum;
 import kr.co.yhs.dto.request.InverstmentDto;
 import kr.co.yhs.dto.result.ResultDto;
@@ -17,6 +18,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,13 +41,17 @@ public class InvestmentService {
         return  repositoryTradeList.findAll().stream().map(unit-> mm.map(unit, TradeDto.class)).collect(Collectors.toList());
     }
     public ResultDto getAbleTrade() {
-        ModelMapper mm = customMapper.TradeDtoMapperForTradeList();
 
+        log.info("get abble trade service");
+        List<AbleTradeDto> list = tradeRepository.getAbleTrade();
+        for(AbleTradeDto u:list)
+            log.info("get trade select fnin={}", u.toString());
         ResultDto rd = ResultDto.success();
-        rd.setTradeList(repositoryTradeList.findAbleTradeList(LocalDateTime.now()).stream().map(unit-> mm.map(unit, TradeDto.class)).collect(Collectors.toList()));
+        rd.setTradeList(list);
+//        rd.setTradeList(repositoryTradeList.findAbleTradeList(LocalDateTime.now()).stream().map(unit-> mm.map(unit, TradeDto.class)).collect(Collectors.toList()));
         return  rd;
     }
-
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public ResultDto tradeRequest(String userId, InverstmentDto dto)
     {
         Optional<TradeEntity> obj = repositoryTradeList.findById(dto.getProductIdLong());
@@ -54,8 +61,8 @@ public class InvestmentService {
         TradeEntity tradeEntity = obj.get();
         log.info("거래 조회 성공 product_id={} status={}", tradeEntity.getId(), tradeEntity.getStatus());
 
-        if( !tradeEntity.getStatus().equals(TRADE_STATE.ST01) ) {
-            throw ServiceException.getServiceException(RESPONSE_CODE.R_20);
+        if( !tradeEntity.getStatus().equals(TRADE_STATE.ST01.getCd()) ) {
+            throw ServiceException.getServiceException(RESPONSE_CODE.R_22);
         }
 
 
@@ -71,6 +78,12 @@ public class InvestmentService {
             {
                 log.info("거래금액 초과");
                 throw ServiceException.getServiceException(RESPONSE_CODE.R_22);
+            }
+            log.info("최종 거래 금액={}", tds.getTotalInverstmentAmount() + dto.getInverstmentAmountLong());
+            if( tds.getTotalInverstmentAmount() + dto.getInverstmentAmountLong() >= tradeEntity.getTotalInvastingAmount() )
+            {
+                log.info("거래 상태 업데이트 ");
+                tradeEntity.setStatus(TRADE_STATE.ST02.getCd());
             }
         }
         else{

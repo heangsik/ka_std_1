@@ -22,9 +22,7 @@ public class TradeEntity {
 
     private LocalDateTime startAt;
     private LocalDateTime finishAt;
-    @Convert(converter = TradeStateConvert.class)
-    @Column(name = "STATUS")
-    private TRADE_STATE status;
+    private String status;
 
 
 }

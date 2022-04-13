@@ -2,6 +2,7 @@ package kr.co.yhs.dto.result;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import kr.co.yhs.config.code.RESPONSE_CODE;
+import kr.co.yhs.dto.entity.AbleTradeDto;
 import kr.co.yhs.dto.entity.TradeDto;
 import lombok.Data;
 
@@ -26,7 +27,8 @@ public class ResultDto {
     }
     private String resultCode;
     private String resultMsg;
-    private List<TradeDto> tradeList;
+    private List<AbleTradeDto> tradeList;
+    private List<TradeDto> allTradeList;
     private LocalDateTime tradeDt;
     private long productId;
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 @Data
 public class TradeDto {
-    private Long product_id;
+    private Long productId;
 
     private String title;
 

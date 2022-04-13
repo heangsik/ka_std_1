@@ -24,7 +24,7 @@ public class CustomMapper {
         modelMapper.addMappings(new PropertyMap<TradeEntity, TradeDto>() {
             @Override
             protected void configure(){
-                map().setProduct_id(source.getId());
+                map().setProductId(source.getId());
             }});
         return modelMapper;
     }

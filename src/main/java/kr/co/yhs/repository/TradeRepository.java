@@ -13,4 +13,6 @@ public interface TradeRepository {
 
     public List<AbleTradeDto> getAbleTrade();
 
+    public List<AbleTradeDto> getNativeAbleTrade();
+
 }
