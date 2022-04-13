@@ -1,6 +1,6 @@
-package kr.co.yhs.configuration;
+package kr.co.yhs.mapper;
 
-import kr.co.yhs.dto.TradeDto;
+import kr.co.yhs.dto.entity.TradeDto;
 import kr.co.yhs.entity.TradeEntity;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;

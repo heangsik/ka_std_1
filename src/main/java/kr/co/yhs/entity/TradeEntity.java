@@ -1,9 +1,8 @@
 package kr.co.yhs.entity;
 
-import kr.co.yhs.configuration.TRADE_STATE;
-import kr.co.yhs.configuration.TradeStateConvert;
+import kr.co.yhs.config.code.TRADE_STATE;
+import kr.co.yhs.config.code.TradeStateConvert;
 import lombok.Data;
-import lombok.Generated;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -2,6 +2,7 @@ package kr.co.yhs.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
@@ -10,6 +11,7 @@ import org.springframework.util.StopWatch;
 @Component
 @Slf4j
 public class LogLapTime {
+//    @Around("execution(* kr.co.yhs.controller.*(..))")
     public Object lapTimeCalc(ProceedingJoinPoint pjp) throws Throwable {
         StopWatch sw = new StopWatch();
         sw.start();

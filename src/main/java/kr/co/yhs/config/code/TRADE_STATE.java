@@ -1,4 +1,4 @@
-package kr.co.yhs.configuration;
+package kr.co.yhs.config.code;
 
 import lombok.Getter;
 

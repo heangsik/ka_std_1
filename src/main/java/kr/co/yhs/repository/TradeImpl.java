@@ -20,6 +20,6 @@ public class TradeImpl implements TradeRepository{
     /*
     
      */
-    QTradeEntity tradeEntity = QTradeEntity.tradeEntity;
+    //QTradeEntity tradeEntity = QTradeEntity.tradeEntity;
 
 }

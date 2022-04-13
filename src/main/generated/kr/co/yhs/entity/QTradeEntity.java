@@ -25,7 +25,7 @@ public class QTradeEntity extends EntityPathBase<TradeEntity> {
 
     public final DateTimePath<java.time.LocalDateTime> startAt = createDateTime("startAt", java.time.LocalDateTime.class);
 
-    public final EnumPath<kr.co.yhs.configuration.TRADE_STATE> status = createEnum("status", kr.co.yhs.configuration.TRADE_STATE.class);
+    public final EnumPath<kr.co.yhs.config.code.TRADE_STATE> status = createEnum("status", kr.co.yhs.config.code.TRADE_STATE.class);
 
     public final StringPath title = createString("title");
 

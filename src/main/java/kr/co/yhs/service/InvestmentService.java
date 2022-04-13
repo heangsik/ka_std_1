@@ -1,7 +1,7 @@
 package kr.co.yhs.service;
 
-import kr.co.yhs.configuration.CustomMapper;
-import kr.co.yhs.dto.TradeDto;
+import kr.co.yhs.mapper.CustomMapper;
+import kr.co.yhs.dto.entity.TradeDto;
 import kr.co.yhs.repository.RepositoryTradeList;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;

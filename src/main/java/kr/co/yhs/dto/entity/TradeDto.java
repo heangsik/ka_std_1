@@ -1,4 +1,4 @@
-package kr.co.yhs.dto;
+package kr.co.yhs.dto.entity;
 
 import lombok.Data;
 

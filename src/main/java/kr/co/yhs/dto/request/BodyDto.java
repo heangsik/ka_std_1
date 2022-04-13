@@ -1,4 +1,4 @@
-package kr.co.yhs.dto;
+package kr.co.yhs.dto.request;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -7,7 +7,8 @@ import lombok.Data;
 
 @Data
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class InverstmentSelectDto {
-    private String userName;
-    private long amount;
+public class BodyDto {
+    private long Inverstmentamount;
+    private String productId;
+
 }

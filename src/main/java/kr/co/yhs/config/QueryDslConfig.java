@@ -1,4 +1,4 @@
-package kr.co.yhs.configuration;
+package kr.co.yhs.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;

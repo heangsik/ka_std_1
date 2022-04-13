@@ -1,7 +1,7 @@
 package kr.co.yhs;
 
-import kr.co.yhs.configuration.TRADE_STATE;
-import kr.co.yhs.dto.TradeDto;
+import kr.co.yhs.config.code.TRADE_STATE;
+import kr.co.yhs.dto.entity.TradeDto;
 import kr.co.yhs.entity.TradeEntity;
 import kr.co.yhs.repository.RepositoryTradeList;
 import org.assertj.core.api.Assertions;

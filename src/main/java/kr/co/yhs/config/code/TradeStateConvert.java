@@ -1,4 +1,6 @@
-package kr.co.yhs.configuration;
+package kr.co.yhs.config.code;
+
+import kr.co.yhs.config.code.TRADE_STATE;
 
 import javax.persistence.AttributeConverter;
 
