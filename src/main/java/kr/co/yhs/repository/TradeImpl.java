@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.yhs.config.code.TRADE_STATE;
 import kr.co.yhs.dto.entity.AbleTradeDto;
+import kr.co.yhs.dto.entity.MyTradeDto;
 import kr.co.yhs.dto.entity.TradeDetailSum;
 import kr.co.yhs.entity.QTradeDetail;
 import kr.co.yhs.entity.QTradeEntity;
@@ -72,27 +73,49 @@ public class TradeImpl implements TradeRepository{
         return jpaQuery.fetch();
     }
 
-    @Override
-    public List<AbleTradeDto> getNativeAbleTrade() {
-        String sql =
- "select l.id as productId,"+
- "       l.title as title,"+
- "       l.total_invasting_amount as totalInvestingAmount,"+
- "       (select sum(trade_amount) from trade_detail d where d.parent_id = l.id) as nowInvestingAmount,"+
- "       (select count(1) from trade_detail d where d.parent_id = l.id) as traderCount,"+
- "       l.status as status,"+
- "       l.start_at as startAt,"+
- "       l.finish_at as finishAt"+
- "  from trade_list l"+
- " where l.status='ST01'"+
- "   and l.finish_at<= ?"+
- "   and l.finish_at< ?";
+//    @Override
+//    public List<AbleTradeDto> getNativeAbleTrade() {
+//        String sql =
+// "select l.id as productId,"+
+// "       l.title as title,"+
+// "       l.total_invasting_amount as totalInvestingAmount,"+
+// "       (select sum(trade_amount) from trade_detail d where d.parent_id = l.id) as nowInvestingAmount,"+
+// "       (select count(1) from trade_detail d where d.parent_id = l.id) as traderCount,"+
+// "       l.status as status,"+
+// "       l.start_at as startAt,"+
+// "       l.finish_at as finishAt"+
+// "  from trade_list l"+
+// " where l.status='ST01'"+
+// "   and l.finish_at<= ?"+
+// "   and l.finish_at< ?";
+//
+//        Query nativeQuery = entityManager.createNativeQuery(sql, AbleTradeDto.class)
+//                .setParameter(1, LocalDateTime.now())
+//                .setParameter(2, LocalDateTime.now());
+//        List<AbleTradeDto> list = nativeQuery.getResultList();
+//        return list;
+//    }
 
-        Query nativeQuery = entityManager.createNativeQuery(sql, AbleTradeDto.class)
-                .setParameter(1, LocalDateTime.now())
-                .setParameter(2, LocalDateTime.now());
-        List<AbleTradeDto> list = nativeQuery.getResultList();
-        return list;
+    @Override
+    public List<MyTradeDto> getMyTrade(String userId) {
+        QTradeDetail tradeDetail = QTradeDetail.tradeDetail;
+        QTradeEntity tradeEntity = QTradeEntity.tradeEntity;
+        JPAQuery<MyTradeDto> jpaQuery = jpaQueryFactory.from(tradeEntity).join(tradeDetail)
+                .on(tradeDetail.parentId.eq(tradeEntity.id))
+                .where(
+                        tradeDetail.userId.eq(userId)
+
+                )
+                .select(
+                        Projections.bean(MyTradeDto.class,
+                                tradeEntity.id.as("productId"),
+                                tradeEntity.title.as("title"),
+                                tradeEntity.totalInvastingAmount.as("totalInvastingAmount"),
+                                tradeDetail.tradeAmount.as("tradeAmount"),
+                                tradeDetail.tradeDt.as("tradeDt")
+                        )
+                );
+        return jpaQuery.fetch();
     }
     //QTradeEntity tradeEntity = QTradeEntity.tradeEntity;
 

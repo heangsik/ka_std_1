@@ -3,6 +3,7 @@ package kr.co.yhs.service;
 import kr.co.yhs.config.code.RESPONSE_CODE;
 import kr.co.yhs.config.code.TRADE_STATE;
 import kr.co.yhs.dto.entity.AbleTradeDto;
+import kr.co.yhs.dto.entity.MyTradeDto;
 import kr.co.yhs.dto.entity.TradeDetailSum;
 import kr.co.yhs.dto.request.InverstmentDto;
 import kr.co.yhs.dto.result.ResultDto;
@@ -101,6 +102,20 @@ public class InvestmentService {
 
     }
 
+    public ResultDto getMyTrade(String userId)
+    {
+        List<MyTradeDto> list = tradeRepository.getMyTrade(userId);
+        ResultDto resultDto;
+        if( list.size() == 0 )
+        {
+            resultDto = ResultDto.fail(RESPONSE_CODE.R_23);
+        }
+        else{
+            resultDto = ResultDto.success();
+            resultDto.setMyTradeList(list);
+        }
+        return resultDto;
+    }
     private TradeDetail getTradeEntity(TradeEntity entity, String userId, long amount)
     {
         TradeDetail tradeDetail = new TradeDetail();

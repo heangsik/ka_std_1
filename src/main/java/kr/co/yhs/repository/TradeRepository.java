@@ -1,6 +1,7 @@
 package kr.co.yhs.repository;
 
 import kr.co.yhs.dto.entity.AbleTradeDto;
+import kr.co.yhs.dto.entity.MyTradeDto;
 import kr.co.yhs.dto.entity.TradeDetailSum;
 import kr.co.yhs.entity.TradeEntity;
 
@@ -13,6 +14,7 @@ public interface TradeRepository {
 
     public List<AbleTradeDto> getAbleTrade();
 
-    public List<AbleTradeDto> getNativeAbleTrade();
+
+    public List<MyTradeDto> getMyTrade(String userId);
 
 }

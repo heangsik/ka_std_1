@@ -1,8 +1,11 @@
 package kr.co.yhs.dto.result;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import kr.co.yhs.config.code.RESPONSE_CODE;
 import kr.co.yhs.dto.entity.AbleTradeDto;
+import kr.co.yhs.dto.entity.MyTradeDto;
 import kr.co.yhs.dto.entity.TradeDto;
 import lombok.Data;
 
@@ -11,6 +14,7 @@ import java.util.List;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ResultDto {
     public static ResultDto fail(RESPONSE_CODE code)
     {
@@ -29,6 +33,7 @@ public class ResultDto {
     private String resultMsg;
     private List<AbleTradeDto> tradeList;
     private List<TradeDto> allTradeList;
+    private List<MyTradeDto> myTradeList;
     private LocalDateTime tradeDt;
     private long productId;
 }

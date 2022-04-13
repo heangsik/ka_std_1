@@ -24,9 +24,9 @@ public class InvestmentController {
 
     private final InvestmentService investmentService;
     @PostMapping(value = "/allTrade")
-    public ResultDto selectAllTrade(@RequestHeader("X-USER-ID") String header, @RequestBody BodyDto dto)
+    public ResultDto selectAllTrade()
     {
-        log.info("select all select x-user-id={}, body={}", header, dto.toString());
+        log.info("select all select");
         ResultDto rd = ResultDto.success();
         rd.setAllTradeList(investmentService.getAllTrade());
         return rd;
@@ -47,11 +47,10 @@ public class InvestmentController {
 
     }
     @PostMapping(value = "/myTrade")
-    public ResultDto myTrade(@RequestHeader(value = "X-USER-ID", required = true) @NotEmpty String hUserId, @Valid @RequestBody InverstmentDto dto)
+    public ResultDto myTrade(@RequestHeader(value = "X-USER-ID", required = true) @NotEmpty String hUserId)
     {
-        log.info("my trade request x-user-id={}, body={}", hUserId, dto.toString());
-        ResultDto rd = investmentService.tradeRequest(hUserId, dto);
-        return rd;
+        log.info("my trade request x-user-id={}", hUserId);
+        return investmentService.getMyTrade(hUserId);
 
     }
     @PostMapping(value = "/api")

@@ -13,6 +13,8 @@ public interface RepositoryTradeDetail extends JpaRepository<TradeDetail, Long> 
 
     List<TradeDetail> findByParentId(String id);
 
+    List<TradeDetail> findByUserId(String userId);
+
 
 //    List<TradeList> findByStartAtLessThanEqualAndFinishAtGreaterThanEqual(LocalDateTime now);
 }
