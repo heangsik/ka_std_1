@@ -16,6 +16,8 @@ import kr.co.yhs.repository.RepositoryTradeDetail;
 import kr.co.yhs.repository.RepositoryTradeList;
 import kr.co.yhs.repository.TradeRepository;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -68,25 +70,30 @@ public class InvestmentService {
         if( !tradeEntity.getStatus().equals(TRADE_STATE.ST01.getCd()) ) {
             throw ServiceException.getServiceException(RESPONSE_CODE.R_22);
         }
-
-        return insertTrade(userId, tradeEntity, requtesDto);
+        InsertRequestDao iDao = InsertRequestDao.builder().userId(userId).tradeEntity(tradeEntity).requtesDto(requtesDto).build();
+        return insertTrade(iDao);
 
     }
+    
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    protected ResultDto insertTrade(String userId, TradeEntity tradeEntity, InverstmentDto requtesDto)
+    protected ResultDto insertTrade(InsertRequestDao iDao)
     {
-        checkTradeTotalAmount(tradeEntity, requtesDto);
+        checkTradeTotalAmount(iDao.getTradeEntity(), iDao.getRequtesDto());
 
-        TradeDetailEntity tradeDetail = repositoryTradeDetail.save(getTradeEntity(tradeEntity, userId, requtesDto.getInverstmentAmountLong()));
-        log.info("거래 등록 성공 product_id={}, trade_dt={}, trade_count={}", tradeEntity.getId(), tradeDetail.getTradeDt());
+        TradeDetailEntity tradeDetail = repositoryTradeDetail.save(getTradeEntity(iDao.getTradeEntity(), iDao.getUserId(), iDao.getRequtesDto().getInverstmentAmountLong()));
+
+        log.info("거래 등록 성공 product_id={}, trade_dt={}, trade_amount={}", iDao.getTradeEntity().getId(), tradeDetail.getTradeDt(), tradeDetail.getTradeAmount());
         ResultDto resultDto = ResultDto.success();
         resultDto.setTradeDt(tradeDetail.getTradeDt());
         resultDto.setProductId(tradeDetail.getParentId());
         return resultDto;
     }
+    @Data
+    @Builder
     static class InsertRequestDao{
-        String userId;
-
+        private String userId;
+        private TradeEntity tradeEntity;
+        private InverstmentDto requtesDto;
     }
 
     private void checkTradeTotalAmount(TradeEntity tradeEntity, InverstmentDto requtesDto)
