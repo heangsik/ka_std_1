@@ -1,4 +1,4 @@
-package kr.co.yhs.mapper;
+package kr.co.yhs.config;
 
 import kr.co.yhs.dto.entity.TradeDto;
 import kr.co.yhs.entity.TradeEntity;

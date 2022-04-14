@@ -9,7 +9,7 @@ import kr.co.yhs.dto.result.ResultDto;
 import kr.co.yhs.entity.TradeDetailEntity;
 import kr.co.yhs.entity.TradeEntity;
 import kr.co.yhs.handler.exception.ServiceException;
-import kr.co.yhs.mapper.CustomMapper;
+import kr.co.yhs.config.CustomMapper;
 import kr.co.yhs.repository.RepositoryTradeDetail;
 import kr.co.yhs.repository.RepositoryTradeList;
 import kr.co.yhs.repository.TradeRepository;
