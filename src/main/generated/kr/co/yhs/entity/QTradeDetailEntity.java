@@ -10,14 +10,14 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QTradeDetail is a Querydsl query type for TradeDetail
+ * QTradeDetailEntity is a Querydsl query type for TradeDetailEntity
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QTradeDetail extends EntityPathBase<TradeDetail> {
+public class QTradeDetailEntity extends EntityPathBase<TradeDetailEntity> {
 
-    private static final long serialVersionUID = 1823829519L;
+    private static final long serialVersionUID = -739559726L;
 
-    public static final QTradeDetail tradeDetail = new QTradeDetail("tradeDetail");
+    public static final QTradeDetailEntity tradeDetailEntity = new QTradeDetailEntity("tradeDetailEntity");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -29,16 +29,16 @@ public class QTradeDetail extends EntityPathBase<TradeDetail> {
 
     public final StringPath userId = createString("userId");
 
-    public QTradeDetail(String variable) {
-        super(TradeDetail.class, forVariable(variable));
+    public QTradeDetailEntity(String variable) {
+        super(TradeDetailEntity.class, forVariable(variable));
     }
 
-    public QTradeDetail(Path<? extends TradeDetail> path) {
+    public QTradeDetailEntity(Path<? extends TradeDetailEntity> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QTradeDetail(PathMetadata metadata) {
-        super(TradeDetail.class, metadata);
+    public QTradeDetailEntity(PathMetadata metadata) {
+        super(TradeDetailEntity.class, metadata);
     }
 
 }

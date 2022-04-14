@@ -1,19 +1,15 @@
 package kr.co.yhs.repository;
 
-import kr.co.yhs.entity.TradeDetail;
-import kr.co.yhs.entity.TradeEntity;
+import kr.co.yhs.entity.TradeDetailEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-public interface RepositoryTradeDetail extends JpaRepository<TradeDetail, Long> {
+public interface RepositoryTradeDetail extends JpaRepository<TradeDetailEntity, Long> {
 
-    List<TradeDetail> findByParentId(String id);
+    List<TradeDetailEntity> findByParentId(long id);
 
-    List<TradeDetail> findByUserId(String userId);
+    List<TradeDetailEntity> findByUserId(String userId);
 
 
 //    List<TradeList> findByStartAtLessThanEqualAndFinishAtGreaterThanEqual(LocalDateTime now);

@@ -28,7 +28,7 @@ public class InvestmentController {
     {
         log.info("select all select");
         ResultDto rd = ResultDto.success();
-        rd.setAllTradeList(investmentService.getAllTrade());
+        rd.setTradeList(investmentService.getAllTrade());
         return rd;
 
     }

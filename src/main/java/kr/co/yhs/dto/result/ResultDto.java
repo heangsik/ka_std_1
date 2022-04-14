@@ -31,9 +31,7 @@ public class ResultDto {
     }
     private String resultCode;
     private String resultMsg;
-    private List<AbleTradeDto> tradeList;
-    private List<TradeDto> allTradeList;
-    private List<MyTradeDto> myTradeList;
+    private List<?> tradeList;
     private LocalDateTime tradeDt;
     private long productId;
 }

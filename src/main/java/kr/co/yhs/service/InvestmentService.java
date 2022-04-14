@@ -7,7 +7,7 @@ import kr.co.yhs.dto.entity.MyTradeDto;
 import kr.co.yhs.dto.entity.TradeDetailSum;
 import kr.co.yhs.dto.request.InverstmentDto;
 import kr.co.yhs.dto.result.ResultDto;
-import kr.co.yhs.entity.TradeDetail;
+import kr.co.yhs.entity.TradeDetailEntity;
 import kr.co.yhs.entity.TradeEntity;
 import kr.co.yhs.handler.exception.ServiceException;
 import kr.co.yhs.mapper.CustomMapper;
@@ -35,7 +35,7 @@ public class InvestmentService {
     final RepositoryTradeList repositoryTradeList;
     final RepositoryTradeDetail repositoryTradeDetail;
     final CustomMapper customMapper;
-    final TradeRepository tradeRepository;
+    final TradeRepository queryTradeRepository;
 
     public List<TradeDto> getAllTrade() {
         ModelMapper mm = customMapper.TradeDtoMapperForTradeList();
@@ -43,19 +43,22 @@ public class InvestmentService {
     }
     public ResultDto getAbleTrade() {
 
-        log.info("get abble trade service");
-        List<AbleTradeDto> list = tradeRepository.getAbleTrade();
+        log.debug("get abble trade service");
+        List<AbleTradeDto> list = queryTradeRepository.getAbleTrade();
+        if(list.size() == 0)
+            return ResultDto.fail(RESPONSE_CODE.R_23);
+
         for(AbleTradeDto u:list)
-            log.info("get trade select fnin={}", u.toString());
+            log.debug("get trade select fnin={}", u.toString());
         ResultDto rd = ResultDto.success();
         rd.setTradeList(list);
 //        rd.setTradeList(repositoryTradeList.findAbleTradeList(LocalDateTime.now()).stream().map(unit-> mm.map(unit, TradeDto.class)).collect(Collectors.toList()));
         return  rd;
     }
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public ResultDto tradeRequest(String userId, InverstmentDto dto)
+    public ResultDto tradeRequest(String userId, InverstmentDto requtesDto)
     {
-        Optional<TradeEntity> obj = repositoryTradeList.findById(dto.getProductIdLong());
+        Optional<TradeEntity> obj = repositoryTradeList.findById(requtesDto.getProductIdLong());
         if( obj.isEmpty() )
             throw ServiceException.getServiceException(RESPONSE_CODE.R_21);
 
@@ -66,8 +69,22 @@ public class InvestmentService {
             throw ServiceException.getServiceException(RESPONSE_CODE.R_22);
         }
 
+        checkTradeTotalAmount(tradeEntity, requtesDto);
 
-        List<TradeDetailSum> list = tradeRepository.getTradeAmount(dto.getProductIdLong());
+        TradeDetailEntity tradeDetail = repositoryTradeDetail.save(getTradeEntity(tradeEntity, userId, requtesDto.getInverstmentAmountLong()));
+        log.info("거래 등록 성공 product_id={}, trade_dt={}, trade_count={}", tradeEntity.getId(), tradeDetail.getTradeDt());
+        ResultDto resultDto = ResultDto.success();
+        resultDto.setTradeDt(tradeDetail.getTradeDt());
+        resultDto.setProductId(tradeDetail.getParentId());
+        return resultDto;
+
+    }
+
+    private boolean checkTradeTotalAmount(TradeEntity tradeEntity, InverstmentDto requtesDto)
+    {
+
+        List<TradeDetailSum> list = queryTradeRepository.getTradeAmount(requtesDto.getProductIdLong());
+
         if( list.size() > 0)
         {
             TradeDetailSum tds = list.get(0);
@@ -80,8 +97,8 @@ public class InvestmentService {
                 log.info("거래금액 초과");
                 throw ServiceException.getServiceException(RESPONSE_CODE.R_22);
             }
-            log.info("최종 거래 금액={}", tds.getTotalInverstmentAmount() + dto.getInverstmentAmountLong());
-            if( tds.getTotalInverstmentAmount() + dto.getInverstmentAmountLong() >= tradeEntity.getTotalInvastingAmount() )
+            log.info("최종 거래 금액={}", tds.getTotalInverstmentAmount() + requtesDto.getInverstmentAmountLong());
+            if( tds.getTotalInverstmentAmount() + requtesDto.getInverstmentAmountLong() >= tradeEntity.getTotalInvastingAmount() )
             {
                 log.info("거래 상태 업데이트 ");
                 tradeEntity.setStatus(TRADE_STATE.ST02.getCd());
@@ -90,35 +107,26 @@ public class InvestmentService {
         else{
             log.info("거래 한도 체크 통과 product_id={}", tradeEntity.getId());
         }
-
-
-
-        TradeDetail tradeDetail = repositoryTradeDetail.save(getTradeEntity(tradeEntity, userId, dto.getInverstmentAmountLong()));
-        log.info("거래 등록 성공 product_id={}, trade_dt={}, trade_count={}", tradeEntity.getId(), tradeDetail.getTradeDt());
-        ResultDto resultDto = ResultDto.success();
-        resultDto.setTradeDt(tradeDetail.getTradeDt());
-        resultDto.setProductId(tradeDetail.getParentId());
-        return resultDto;
-
+        return true;
     }
 
     public ResultDto getMyTrade(String userId)
     {
-        List<MyTradeDto> list = tradeRepository.getMyTrade(userId);
+        List<MyTradeDto> list = queryTradeRepository.getMyTrade(userId);
         ResultDto resultDto;
         if( list.size() == 0 )
         {
-            resultDto = ResultDto.fail(RESPONSE_CODE.R_23);
+            throw ServiceException.getServiceException(RESPONSE_CODE.R_23);
         }
         else{
             resultDto = ResultDto.success();
-            resultDto.setMyTradeList(list);
+            resultDto.setTradeList(list);
         }
         return resultDto;
     }
-    private TradeDetail getTradeEntity(TradeEntity entity, String userId, long amount)
+    private TradeDetailEntity getTradeEntity(TradeEntity entity, String userId, long amount)
     {
-        TradeDetail tradeDetail = new TradeDetail();
+        TradeDetailEntity tradeDetail = new TradeDetailEntity();
         tradeDetail.setParentId(entity.getId());
         tradeDetail.setTradeAmount(amount);
         tradeDetail.setUserId(userId);

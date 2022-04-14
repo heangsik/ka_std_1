@@ -9,24 +9,23 @@ import kr.co.yhs.config.code.TRADE_STATE;
 import kr.co.yhs.dto.entity.AbleTradeDto;
 import kr.co.yhs.dto.entity.MyTradeDto;
 import kr.co.yhs.dto.entity.TradeDetailSum;
-import kr.co.yhs.entity.QTradeDetail;
+import kr.co.yhs.entity.QTradeDetailEntity;
 import kr.co.yhs.entity.QTradeEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.time.LocalDateTime;
 import java.util.List;
 @Repository
 @AllArgsConstructor
-public class TradeImpl implements TradeRepository{
+public class TradeImplByH2 implements TradeRepository{
     private final JPAQueryFactory jpaQueryFactory;
     private final EntityManager entityManager;
 
     @Override
     public List<TradeDetailSum> getTradeAmount(long parentId){
-        QTradeDetail qTradeDetail = QTradeDetail.tradeDetail;
+        QTradeDetailEntity qTradeDetail = QTradeDetailEntity.tradeDetailEntity;
 
         JPAQuery<TradeDetailSum> jpaQuery = jpaQueryFactory.from(qTradeDetail)
                 .where(
@@ -44,7 +43,7 @@ public class TradeImpl implements TradeRepository{
 
     @Override
     public List<AbleTradeDto> getAbleTrade() {
-        QTradeDetail tradeDetail = QTradeDetail.tradeDetail;
+        QTradeDetailEntity tradeDetail = QTradeDetailEntity.tradeDetailEntity;
         QTradeEntity tradeEntity = QTradeEntity.tradeEntity;
         JPAQuery<AbleTradeDto> jpaQuery = jpaQueryFactory.from(tradeEntity)
                 //.leftJoin(tradeDetail).on(tradeEntity.id.eq(tradeDetail.parentId))
@@ -58,10 +57,8 @@ public class TradeImpl implements TradeRepository{
                         Projections.bean(AbleTradeDto.class,
                                 tradeEntity.id.as("productId"),
                                 tradeEntity.title.as("title"),
-                                //tradeEntity.totalInvastingAmount.as("totalInvestingAmount"),
                                 ExpressionUtils.as(JPAExpressions.select(tradeDetail.tradeAmount.sum()).from(tradeDetail).where(tradeDetail.parentId.eq(tradeEntity.id)), "totalInvestingAmount"),
                                 ExpressionUtils.as(JPAExpressions.select(tradeDetail.tradeAmount.count()).from(tradeDetail).where(tradeDetail.parentId.eq(tradeEntity.id)), "nowInvestingAmount"),
-                                //tradeDetail.tradeAmount.sum().as("nowInvestingAmount"),
                                 tradeEntity.id.count().as("traderCount"),
                                 tradeEntity.status.as("status"),
                                 tradeEntity.startAt.as("startAt"),
@@ -98,7 +95,7 @@ public class TradeImpl implements TradeRepository{
 
     @Override
     public List<MyTradeDto> getMyTrade(String userId) {
-        QTradeDetail tradeDetail = QTradeDetail.tradeDetail;
+        QTradeDetailEntity tradeDetail = QTradeDetailEntity.tradeDetailEntity;
         QTradeEntity tradeEntity = QTradeEntity.tradeEntity;
         JPAQuery<MyTradeDto> jpaQuery = jpaQueryFactory.from(tradeEntity).join(tradeDetail)
                 .on(tradeDetail.parentId.eq(tradeEntity.id))
