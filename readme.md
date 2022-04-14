@@ -15,4 +15,6 @@
 # 문제 해결 전략
 1. DB처리 방식은 JPA와 QueryDSL을 사용한다.
 2. REST API의 요청 전문 체크는 Validate를 사용한다.
-3. 
+3. 거래의 동시성은 Transactional를 사용하여 제어를 한다.
+4. 응답은 공통 처리를 한다.
+5. 
