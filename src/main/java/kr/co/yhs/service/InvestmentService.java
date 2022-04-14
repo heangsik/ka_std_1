@@ -74,11 +74,13 @@ public class InvestmentService {
         return insertTrade(iDao);
 
     }
-    
+
     @Transactional(isolation = Isolation.SERIALIZABLE)
     protected ResultDto insertTrade(InsertRequestDao iDao)
     {
-        checkTradeTotalAmount(iDao.getTradeEntity(), iDao.getRequtesDto());
+        if( !checkTradeTotalAmount(iDao.getTradeEntity(), iDao.getRequtesDto())){
+            throw ServiceException.getServiceException(RESPONSE_CODE.R_22);
+        }
 
         TradeDetailEntity tradeDetail = repositoryTradeDetail.save(getTradeEntity(iDao.getTradeEntity(), iDao.getUserId(), iDao.getRequtesDto().getInverstmentAmountLong()));
 
@@ -96,7 +98,7 @@ public class InvestmentService {
         private InverstmentDto requtesDto;
     }
 
-    private void checkTradeTotalAmount(TradeEntity tradeEntity, InverstmentDto requtesDto)
+    private boolean checkTradeTotalAmount(TradeEntity tradeEntity, InverstmentDto requtesDto)
     {
 
         List<TradeDetailSum> list = queryTradeRepository.getTradeAmount(requtesDto.getProductIdLong());
@@ -111,7 +113,7 @@ public class InvestmentService {
             if(tds.getTotalInverstmentAmount() >= tradeEntity.getTotalInvastingAmount() )
             {
                 log.info("거래금액 초과");
-                throw ServiceException.getServiceException(RESPONSE_CODE.R_22);
+                return false;
             }
             log.info("최종 거래 금액={}", tds.getTotalInverstmentAmount() + requtesDto.getInverstmentAmountLong());
             if( tds.getTotalInverstmentAmount() + requtesDto.getInverstmentAmountLong() >= tradeEntity.getTotalInvastingAmount() )
@@ -123,6 +125,7 @@ public class InvestmentService {
         else{
             log.info("거래 한도 체크 통과 product_id={}", tradeEntity.getId());
         }
+        return true;
     }
 
     public ResultDto getMyTrade(String userId)
