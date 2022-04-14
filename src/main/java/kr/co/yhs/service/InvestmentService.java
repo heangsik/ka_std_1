@@ -55,7 +55,7 @@ public class InvestmentService {
 //        rd.setTradeList(repositoryTradeList.findAbleTradeList(LocalDateTime.now()).stream().map(unit-> mm.map(unit, TradeDto.class)).collect(Collectors.toList()));
         return  rd;
     }
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+
     public ResultDto tradeRequest(String userId, InverstmentDto requtesDto)
     {
         Optional<TradeEntity> obj = repositoryTradeList.findById(requtesDto.getProductIdLong());
@@ -69,6 +69,12 @@ public class InvestmentService {
             throw ServiceException.getServiceException(RESPONSE_CODE.R_22);
         }
 
+        return insertTrade(userId, tradeEntity, requtesDto);
+
+    }
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    protected ResultDto insertTrade(String userId, TradeEntity tradeEntity, InverstmentDto requtesDto)
+    {
         checkTradeTotalAmount(tradeEntity, requtesDto);
 
         TradeDetailEntity tradeDetail = repositoryTradeDetail.save(getTradeEntity(tradeEntity, userId, requtesDto.getInverstmentAmountLong()));
@@ -77,10 +83,13 @@ public class InvestmentService {
         resultDto.setTradeDt(tradeDetail.getTradeDt());
         resultDto.setProductId(tradeDetail.getParentId());
         return resultDto;
+    }
+    static class InsertRequestDao{
+        String userId;
 
     }
 
-    private boolean checkTradeTotalAmount(TradeEntity tradeEntity, InverstmentDto requtesDto)
+    private void checkTradeTotalAmount(TradeEntity tradeEntity, InverstmentDto requtesDto)
     {
 
         List<TradeDetailSum> list = queryTradeRepository.getTradeAmount(requtesDto.getProductIdLong());
@@ -107,7 +116,6 @@ public class InvestmentService {
         else{
             log.info("거래 한도 체크 통과 product_id={}", tradeEntity.getId());
         }
-        return true;
     }
 
     public ResultDto getMyTrade(String userId)
