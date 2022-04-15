@@ -94,6 +94,7 @@ public class InvestmentService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     protected ResultDto insertTrade(InsertRequestDao iDao)
     {
+        // 거래 입력 직전에 금액을 체크 한다.
         if( !checkTradeTotalAmount(iDao.getTradeEntity(), iDao.getRequtesDto())){
             throw ServiceException.getServiceException(RESPONSE_CODE.R_22);
         }
