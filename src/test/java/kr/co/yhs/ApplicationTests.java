@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
+@DisplayName("서비스 테스트")
 class ApplicationTests {
 	@Autowired
 	RepositoryTradeList rm;

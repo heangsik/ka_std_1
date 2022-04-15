@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-import javax.validation.executable.ValidateOnExecution;
 
 @Slf4j
 @Controller
@@ -22,7 +20,13 @@ import javax.validation.executable.ValidateOnExecution;
 @Validated
 public class InvestmentController {
 
+
     private final InvestmentService investmentService;
+    @GetMapping(value = "get_mode")
+    public String getTest(){
+        log.info("get test input");
+        return "get test success";
+    }
     @PostMapping(value = "/allTrade")
     public ResultDto selectAllTrade()
     {
