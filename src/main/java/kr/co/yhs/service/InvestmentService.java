@@ -67,12 +67,28 @@ public class InvestmentService {
         TradeEntity tradeEntity = obj.get();
         log.info("거래 조회 성공 product_id={} status={}", tradeEntity.getId(), tradeEntity.getStatus());
 
-        if( !tradeEntity.getStatus().equals(TRADE_STATE.ST01.getCd()) ) {
-            throw ServiceException.getServiceException(RESPONSE_CODE.R_22);
-        }
+        isCheckAbleTrade(tradeEntity);
+
         InsertRequestDao iDao = InsertRequestDao.builder().userId(userId).tradeEntity(tradeEntity).requtesDto(requtesDto).build();
         return insertTrade(iDao);
 
+    }
+
+    private void isCheckAbleTrade(TradeEntity tradeEntity)
+    {
+
+        if( !tradeEntity.getStatus().equals(TRADE_STATE.ST01.getCd()) ) {
+            log.info("거래 가능 금액 초과");
+            throw ServiceException.getServiceException(RESPONSE_CODE.R_22);
+        }
+
+        LocalDateTime lt = LocalDateTime.now();
+        if( lt.isBefore(tradeEntity.getStartAt()) ||
+        lt.isAfter(tradeEntity.getFinishAt()))
+        {
+            log.info("거래 가능 기간 아님 able start={}, end={} now={}", tradeEntity.getStartAt(), tradeEntity.getFinishAt(), lt);
+            throw ServiceException.getServiceException(RESPONSE_CODE.R_20);
+        }
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)

@@ -22,5 +22,6 @@ public interface RepositoryTradeList extends JpaRepository<TradeEntity, Long> {
 
 
 
+
     //    List<TradeList> findByStartAtLessThanEqualAndFinishAtGreaterThanEqual(LocalDateTime now);
 }

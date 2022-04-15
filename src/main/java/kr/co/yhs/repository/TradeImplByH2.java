@@ -70,29 +70,6 @@ public class TradeImplByH2 implements TradeRepository{
         return jpaQuery.fetch();
     }
 
-//    @Override
-//    public List<AbleTradeDto> getNativeAbleTrade() {
-//        String sql =
-// "select l.id as productId,"+
-// "       l.title as title,"+
-// "       l.total_invasting_amount as totalInvestingAmount,"+
-// "       (select sum(trade_amount) from trade_detail d where d.parent_id = l.id) as nowInvestingAmount,"+
-// "       (select count(1) from trade_detail d where d.parent_id = l.id) as traderCount,"+
-// "       l.status as status,"+
-// "       l.start_at as startAt,"+
-// "       l.finish_at as finishAt"+
-// "  from trade_list l"+
-// " where l.status='ST01'"+
-// "   and l.finish_at<= ?"+
-// "   and l.finish_at< ?";
-//
-//        Query nativeQuery = entityManager.createNativeQuery(sql, AbleTradeDto.class)
-//                .setParameter(1, LocalDateTime.now())
-//                .setParameter(2, LocalDateTime.now());
-//        List<AbleTradeDto> list = nativeQuery.getResultList();
-//        return list;
-//    }
-
     @Override
     public List<MyTradeDto> getMyTrade(String userId) {
         QTradeDetailEntity tradeDetail = QTradeDetailEntity.tradeDetailEntity;
