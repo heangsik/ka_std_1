@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax home</title>
+</head>
+<script src="/js/JQuery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#getBtn").on("click", function () {
+
+            let boardNo = $("#boardNo");
+            let boardNoVal = boardNo.val();
+
+            console.log(boardNoVal);
+
+            $.get("/boards/" + boardNoVal, function (data) {
+                console.log(data);
+                alert(JSON.stringify(data));
+
+            });
+        });
+
+    })
+</script>
+<body>
+    <h1>AJAX HOME</h1>
+    <form>
+        bardNo : <input type="text" name="boardNo" id="boardNo" value=""/><br>
+        title : <input type="text" name="title" id="title" value=""/><br>
+        content : <input type="text" name="content" id="content" value=""/><br>
+        writer : <input type="text" name="writer" id="writer" value=""/><br>
+    </form>
+    <div>
+        <button id="getBtn"></button>
+
+    </div>
+</body>
+</html>

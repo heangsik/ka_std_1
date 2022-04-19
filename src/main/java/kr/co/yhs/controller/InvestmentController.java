@@ -1,5 +1,6 @@
 package kr.co.yhs.controller;
 
+import io.swagger.annotations.*;
 import kr.co.yhs.dto.request.BodyDto;
 import kr.co.yhs.dto.request.InverstmentDto;
 import kr.co.yhs.dto.result.ResultDto;
@@ -18,6 +19,7 @@ import javax.validation.constraints.NotEmpty;
 @RequiredArgsConstructor
 @RestController
 @Validated
+@Api(tags={"투자 기능 제공 API"})
 public class InvestmentController {
 
 
@@ -43,6 +45,12 @@ public class InvestmentController {
         return investmentService.getAbleTrade();
 
     }
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "x", value = "x 값", required = true, dataType = "int", paramType = "path")
+            , @ApiImplicitParam(name = "y", value = "y 값", required = true, dataType = "int", paramType = "query")
+    })
+    @ApiResponse(code = 502, message = "사용자의 나이가 10살 이하일 때")
+    @ApiOperation(value = "거래를 요청하는 API")
     @PostMapping(value = "/requestTrade")
     public ResultDto requestTrade(@RequestHeader(value = "X-USER-ID", required = true) @NotEmpty String hUserId, @Valid @RequestBody InverstmentDto dto)
     {
